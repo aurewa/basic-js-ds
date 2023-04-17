@@ -91,29 +91,67 @@ class BinarySearchTree {
     {
       if (node.data === data){
 
+          if(node.left === null && node.right === null)
+          {
+              node = null;
+              
+              if (parent.right !== null){
+                if (parent.right.data === data){
+                  parent.right = null;
+                }
+              }
+              
+              else if (parent.left !== null)
+              {
+                if (parent.left.data === data){
+                  parent.left = null;
+                }
+              }
+              
+              break;
+          }
+          
           let newRight = node.right;
           let newLeft = node.left;
-          
+
           if (parent === null){
+            
             this._root = newRight;
             parent = this._root;
-          }else{
-            parent.right = newRight;         
-          }         
+
+          }
+          
+          else if (newRight === null || parent.right === null){
+            parent.right = null;
+          }
+
+          else if (parent.right.data > newRight.data){
+            newLeft = newRight;
+          } 
+
+          else {
+            parent.right = newRight;
+          }    
 
           if (newLeft === null) break;
 
           if (parent.left === null){
             parent.left = newLeft;
-            break;
-          }
 
-          parent.left.left = newLeft;
-          
-        break;
+          }else{
+              if (parent.left.data > newLeft.data){
+                parent.left.left = newLeft;
+              }else{
+                let leftTmp = parent.left;
+                parent.left = newLeft;
+                parent.left.left = leftTmp;
+              }
+          }          
+          break;
       }
 
       if (node != null){
+
         parent = node;
         node  = node.data < data ? node.right : node.left;
       }
